@@ -1,7 +1,7 @@
 "use client"
 
 import JobCard from "@/components/job-card"
-import { auth, firestore } from "@/config/config"
+import { firestore } from "@/config/config"
 import { collection, doc, DocumentData, getDoc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 
