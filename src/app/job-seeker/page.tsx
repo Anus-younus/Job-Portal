@@ -1,12 +1,14 @@
 "use client"
 
 import JobCard from "@/components/job-card"
+import Loader from "@/components/loader" // Import your Loader component
 import { firestore } from "@/config/config"
 import { collection, doc, DocumentData, getDoc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
 
 export default function JobSeeker() {
   const [jobs, setJobs] = useState<DocumentData[]>([])
+  const [loading, setLoading] = useState(true) // Add loading state
 
   useEffect(() => {
     fetchJobs()
@@ -40,25 +42,33 @@ export default function JobSeeker() {
       });
     } catch (e) {
       console.error("Error fetching jobs:", e);
+    } finally {
+      setLoading(false); // Set loading to false after jobs are fetched
     }
   };
+
   return (
     <>
-      <div className="flex justify-center items-center gap-4 flex-wrap">
-        {jobs.length > 0 && jobs.map((job) => (
-          <JobCard
-            key={job.id} // Make sure each job card has a unique key
-            jobTitle={job.jobTitle}
-            jobType={job.jobType}
-            salaryRange={job.salaryRange}
-            jobId={job.id}
-            uid={job.uid}
-            logo={job.user?.logo || ""} // Handle undefined logo case
-            name={job.user?.name || "Unknown Company"} // Handle undefined name case
-            hold={job.hold} 
-            deleted={job.deleted}          />
-        ))}
-      </div>
+      {loading ? ( // Conditional rendering for loader
+        <Loader /> // Show Loader while loading
+      ) : (
+        <div className="flex justify-center items-center gap-4 flex-wrap">
+          {jobs.length > 0 && jobs.map((job) => (
+            <JobCard
+              key={job.id} // Make sure each job card has a unique key
+              jobTitle={job.jobTitle}
+              jobType={job.jobType}
+              salaryRange={job.salaryRange}
+              jobId={job.id}
+              uid={job.uid}
+              logo={job.user?.logo || ""} // Handle undefined logo case
+              name={job.user?.name || "Unknown Company"} // Handle undefined name case
+              hold={job.hold} 
+              deleted={job.deleted}          
+            />
+          ))}
+        </div>
+      )}
     </>
   )
 }
