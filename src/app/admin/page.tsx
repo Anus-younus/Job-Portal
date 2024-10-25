@@ -1,6 +1,6 @@
 "use client"
 
-import JobCard from "@/components/job-card"
+import AdminJobCard from "@/components/admin-job-card"
 import { firestore } from "@/config/config"
 import { collection, doc, DocumentData, getDoc, onSnapshot } from "firebase/firestore"
 import { useEffect, useState } from "react"
@@ -34,7 +34,7 @@ export default function AllJobs() {
     return (
         <div data-theme="synthwave" className="flex justify-center items-center gap-4 flex-wrap">
         {jobs.length > 0 && jobs.map((job) => (
-          <JobCard
+          <AdminJobCard
             key={job.id}
             jobTitle={job.jobTitle}
             jobType={job.jobType}

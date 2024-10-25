@@ -1,11 +1,15 @@
 "use client"
 
 import { auth, firestore } from "@/config/config";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreateNewJob() {
+type UpdateJobType = {
+    params: { id: string }
+}
+
+export default function UpdateDoc({ params: { id } }: UpdateJobType) {
     const [jobTitle, setJobTitle] = useState("");
     const [jd, setJD] = useState("");
     const [qualification, setQualification] = useState("");
@@ -18,6 +22,9 @@ export default function CreateNewJob() {
     const [alertType, setAlertType] = useState<"error" | "success">("error");
     const [showAlert, setShowAlert] = useState(false);
     const router = useRouter();
+    useEffect(() => {
+        getDocs()
+    }, [])
 
     const validateFields = () => {
         if (!jobTitle || !jd || !qualification || !skillSet || !otherReq || !jobType || !salaryRange || !address) {
@@ -31,6 +38,24 @@ export default function CreateNewJob() {
         }
         return true;
     };
+
+    const getDocs = async () => {
+        try {
+            const docRef = doc(firestore, "jobs", id)
+            onSnapshot(docRef, (job) => {
+                setJobTitle(job.data()?.jobTitle)
+                setJD(job.data()?.jobDescription)
+                setQualification(job.data()?.qualification)
+                setSkillSet(job.data()?.skillSet)
+                setOtherReq(job.data()?.otherRequirements)
+                setJobType(job.data()?.jobType)
+                setSalaryRange(job.data()?.salaryRange)
+                setAddress(job.data()?.address)
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     const createNewJob = async () => {
         if (!validateFields()) return;
@@ -50,8 +75,8 @@ export default function CreateNewJob() {
         };
 
         try {
-            const collectionRef = collection(firestore, "jobs");
-            await addDoc(collectionRef, newJob);
+            const docRef = doc(firestore, "jobs", id);
+            await setDoc(docRef, newJob, { merge: true });
 
             // Show success message
             setMsg("Job created successfully!");
@@ -103,7 +128,7 @@ export default function CreateNewJob() {
                     <span>{msg}</span>
                 </div>
             )}
-            <h1 className="text-3xl font-bold">Create new Job</h1>
+            <h1 className="text-3xl font-bold">Update this Job</h1>
             <div className="card bg-base-100 w-96 mt-5 gap-3">
                 <label className="input input-bordered flex items-center gap-2">
                     <input
@@ -184,7 +209,7 @@ export default function CreateNewJob() {
                     placeholder="Description"
                 />
                 <button onClick={createNewJob} className="btn btn-primary">
-                    Create Job
+                    Update job
                 </button>
             </div>
         </div>

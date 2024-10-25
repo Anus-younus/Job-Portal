@@ -1,7 +1,9 @@
 "use client"
 
 import { auth } from "@/config/config"
+import { useAuthContext } from "@/context/auth-context"
 import { signOut } from "firebase/auth"
+import Image from "next/image"
 import Link from "next/link"
 
 type NavbarType = {
@@ -9,6 +11,7 @@ type NavbarType = {
 }
 
 export default function Navbar({ company }: NavbarType) {
+    const { user } = useAuthContext()!
     const logout = async () => {
         await signOut(auth)
     }
@@ -68,6 +71,16 @@ export default function Navbar({ company }: NavbarType) {
                 </ul>
             </div>
             <div className="navbar-end">
+                <h1 className="text-xl font-bold mr-3">Welcome {user?.name}</h1>
+                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                    <div className="w-10 rounded-full">
+                        <Image
+                            width={"10"}
+                            height={"10"}
+                            alt="Tailwind CSS Navbar component"
+                            src={user?.logo as string} />
+                    </div>
+                </div>
                 <a className="btn" onClick={logout}>Logout</a>
             </div>
         </div>

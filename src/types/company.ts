@@ -7,5 +7,7 @@ export type CompanyType = {
     email:string,
     role:string,
     uid:string,
-    emailVerified: boolean
+    emailVerified: boolean,
+    deleted?: boolean,
+    hold?:boolean
 }

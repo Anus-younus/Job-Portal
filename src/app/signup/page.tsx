@@ -5,7 +5,7 @@ import AuthForm from "@/components/auth-form";
 import { auth, firestore } from "@/config/config";
 import AuthFormProtectedRoutes from "@/HOC/auth-form-protectd-route";
 import { UserRole } from "@/types/user-role";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import ErrorComp from "@/components/error"; // Assuming you have an error component for showing error messages
@@ -29,27 +29,41 @@ export default function SignUp() {
     };
 
     const signup = async (email: string, password: string, role?: UserRole) => {
-        if (!validateEmail(email)) {
-            setErrorMessage("Invalid email format.");
-            return;
-        }
-        if (!role) {
-            setErrorMessage("Please select a role.");
-            return;
-        }
-        setErrorMessage(""); // Clear any previous error message
-        setLoading(true); // Start loading when signup begins
-
         try {
-            const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-            const docRef = doc(firestore, "users", userCredentials.user.uid);
-            await setDoc(docRef, { email, role, uid: userCredentials.user.uid, emailVerified: false });
-            console.log("User registration successful", userCredentials.user.uid);
-        } catch (error) {
-            setErrorMessage("Signup failed. Please try again.");
-            console.error(error);
-        } finally {
-            setLoading(false); // Stop loading after signup attempt
+            if (!validateEmail(email)) {
+                setErrorMessage("Invalid email format.");
+                return;
+            }
+            if (!role) {
+                setErrorMessage("Please select a role.");
+                return;
+            }
+            setErrorMessage(""); // Clear any previous error message
+            setLoading(true); // Start loading when signup begins
+
+            try {
+                const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredentials.user;
+
+                // Add user data to Firestore
+                const docRef = doc(firestore, "users", user.uid);
+                await setDoc(docRef, { email, role, uid: user.uid, emailVerified: false });
+
+                // Send email verification
+                if (!user.emailVerified) {
+                    await sendEmailVerification(user);
+                    console.log("Verification email sent.");
+                }
+
+                console.log("User registration successful", user.uid);
+            } catch (error) {
+                setErrorMessage("Signup failed. Please try again.");
+                console.error(error);
+            } finally {
+                setLoading(false); // Stop loading after signup attempt
+            }
+        } catch (e) {
+            console.error(e)
         }
     };
 

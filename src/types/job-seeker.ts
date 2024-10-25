@@ -1,6 +1,6 @@
 export type JobSeekerType = {
     name?:string,
-    pic?:string,
+    logo?:string,
     description?:string,
     phone?:string,
     address?:string,
@@ -9,4 +9,6 @@ export type JobSeekerType = {
     role:string,
     resume?:string,
     emailVerified: boolean
+    deleted?: boolean,
+    hold?:boolean
 }

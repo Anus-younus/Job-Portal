@@ -3,10 +3,13 @@
 import { auth } from "@/config/config"
 import { signOut } from "firebase/auth"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function AdminNavbar() {
+    const router = useRouter()
     const logout = async () => {
         await signOut(auth)
+        router.push("/login") 
     }
     return (
         <div data-theme="synthwave" className="navbar bg-base-100">

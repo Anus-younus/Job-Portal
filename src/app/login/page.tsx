@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AuthForm from "@/components/auth-form";
 import { auth } from "@/config/config";
 import AuthFormProtectedRoutes from "@/HOC/auth-form-protectd-route";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import ErrorComp from "@/components/error";
 
@@ -41,6 +41,17 @@ export default function Login() {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log("User login successful", user.uid);
+
+                // Check if the user's email is verified and send email verification if not
+                if (!user.emailVerified) {
+                    sendEmailVerification(user)
+                        .then(() => {
+                            console.log("Verification email sent.");
+                        })
+                        .catch((error) => {
+                            console.error("Error sending verification email:", error);
+                        });
+                }
             })
             .catch((error) => {
                 // Check for specific error codes from Firebase

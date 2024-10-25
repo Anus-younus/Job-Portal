@@ -4,4 +4,7 @@ export type AdminType = {
     role:string,
     uid: string,
     emailVerified: boolean
+    logo?:string,
+    deleted?: boolean,
+    hold?:boolean
 }
