@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDs-E9kqfd10yra5A65pghbNcMmNvRQumQ",
-  authDomain: "job-portal-21d55.firebaseapp.com",
-  projectId: "job-portal-21d55",
-  storageBucket: "job-portal-21d55.appspot.com",
-  messagingSenderId: "81220574939",
-  appId: "1:81220574939:web:bfcabed8e2499da74df6fe",
-  measurementId: "G-PBPVDM8GZ1"
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
+  authDomain: process.env.NEXT_PUBLIC_authDomain,
+  projectId: process.env.NEXT_PUBLIC_projectId,
+  storageBucket: process.env.NEXT_PUBLIC_storageBucket,
+  messagingSenderId: process.env.NEXT_PUBLIC_messagingSenderId,
+  appId: process.env.NEXT_PUBLIC_appId,
+  measurementId: process.env.NEXT_PUBLIC_measurementId,
 };
 
 export const app = initializeApp(firebaseConfig)
