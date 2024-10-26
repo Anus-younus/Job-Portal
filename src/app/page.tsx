@@ -8,7 +8,7 @@ export default function Page() {
 
   useEffect(() => {
     router.push("/login")
-  }, [])
+  })
   return (
     <>
       <div data-theme="synthwave" className="flex justify-center items-center h-96">

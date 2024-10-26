@@ -30,7 +30,7 @@ export default function Company() {
             if (stopSnap) stopSnap();
             unsub();
         };
-    }, []);
+    });
 
     const handleDelete = async (jobId: string) => {
         try {

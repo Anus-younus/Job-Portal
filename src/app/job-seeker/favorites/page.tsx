@@ -37,7 +37,7 @@ export default function Favorites() {
 
         // Cleanup subscription on unmount
         return () => unsubscribe()
-    }, [])
+    })
 
     const fetchFavJobs = async () => {
         try {

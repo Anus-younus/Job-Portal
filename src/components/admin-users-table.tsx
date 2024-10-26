@@ -2,6 +2,7 @@
 
 import { firestore } from "@/config/config"
 import { doc, updateDoc } from "firebase/firestore"
+import Image from "next/image"
 
 type AllUsersTableType = {
     name: string
@@ -40,7 +41,9 @@ export default function AllUsersTable({ name, email, address, phone, logo, hold,
                 <div className="flex items-center gap-3">
                     <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                            <img
+                            <Image
+                                height={30}
+                                width={30}
                                 src={logo || "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="}
                                 alt="User Avatar"
                             />

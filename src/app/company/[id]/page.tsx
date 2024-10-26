@@ -24,7 +24,7 @@ export default function UpdateDoc({ params: { id } }: UpdateJobType) {
     const router = useRouter();
     useEffect(() => {
         getDocs()
-    }, [])
+    })
 
     const validateFields = () => {
         if (!jobTitle || !jd || !qualification || !skillSet || !otherReq || !jobType || !salaryRange || !address) {

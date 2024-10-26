@@ -2,9 +2,9 @@
 
 import { auth, firestore } from "@/config/config";
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import Loader from "./loader";
 
 type JobCardType = {
     jobTitle: string;
@@ -32,7 +32,6 @@ export default function AdminJobCard({
     deleted
 }: JobCardType) {
     const [saved, setSaved] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     const [applied, setApplied] = useState(false);
     const router = useRouter();
 
@@ -45,12 +44,10 @@ export default function AdminJobCard({
                 setApplied(!!isApplied);
             } catch (e) {
                 console.error(e);
-            } finally {
-                setIsLoading(false);
             }
         };
         initializeState();
-    }, []);
+    });
 
     const handleChange = () => {
         router.push(`/job-seeker/${jobId}`);
@@ -127,7 +124,9 @@ export default function AdminJobCard({
                 <p>Salary: {salaryRange}</p>
                 <div className="card-actions justify-between mt-2 items-center">
                     <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <img
+                        <Image
+                            height={30}
+                            width={30}
                             className="w-full h-full object-cover"
                             alt={`${name}'s logo`}
                             src={logo || "/default-logo.png"} // Use default-logo.png if no logo

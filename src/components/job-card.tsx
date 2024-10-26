@@ -2,6 +2,7 @@
 
 import { auth, firestore } from "@/config/config"
 import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 
@@ -50,7 +51,7 @@ export default function JobCard({
       }
     }
     checkIfSaved()
-  }, [])
+  })
 
   useEffect(() => {
     const checkIfApplied = async () => {
@@ -64,7 +65,7 @@ export default function JobCard({
       }
     }
     checkIfApplied()
-  }, [])
+  })
 
   const changePublishStatus = () => {
     const jobRef = doc(firestore, "jobs", jobId);
@@ -147,7 +148,9 @@ export default function JobCard({
           <div className="card-actions justify-between mt-2 items-center">
             <div className="w-10 h-10 rounded-full overflow-hidden">
               {/* Use default logo if the logo is not available */}
-              <img
+              <Image
+                height={30}
+                width={30}
                 className="w-full h-full object-cover"
                 alt={`${name}'s logo`}
                 src={logo || "/default-logo.png"}  // Use default-logo.png or any placeholder image
